@@ -1,4 +1,4 @@
-import { createContext } from "react"
+import { createContext, useState } from "react"
 {/*I have created a shopContext that can be imported anywhere in the app
      */}
 import { products } from "../assets/assets"
@@ -8,12 +8,14 @@ const ShopContextProvider = (props) => {
 
      const currency = 'Kes';
      const delivery_fee = 10;
+     const [search, setSearch] = useState('');
+     const [showSearch, setShowSearch] = useState(false);
 
 
      // ✅ This is where you'd define shared state and functions
 
      const value = {
-          products, currency, delivery_fee
+          products, currency, delivery_fee, search,setSearch, showSearch, setShowSearch
      }
 
      return (

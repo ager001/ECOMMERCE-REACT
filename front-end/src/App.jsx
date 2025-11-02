@@ -11,6 +11,7 @@ import PlaceOrder from './pages/PlaceOrder'
 import Orders from './pages/Orders'
 import NavBar from './components/NavBar'
 import Footer from './components/Footer'
+import SearchBar from './components/SearchBar'
 
 
 
@@ -28,6 +29,7 @@ const App = () => {
   */}
 
        <NavBar/>
+       <SearchBar/>
         <Routes>{/*I have created all 9 routes for my pages and their paths */}
            <Route path='/' element={<Home/>}/>
            <Route path='/collection' element={<Collection/>}/>
