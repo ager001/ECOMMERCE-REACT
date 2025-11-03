@@ -18,8 +18,8 @@ const Product = () => {
   // Extract productId from the URL using React Router
   const { productId } = useParams();
 
-  // Access products and currency from global ShopContext
-  const { products, currency } = useContext(ShopContext);
+  // Access products and currency and addToCart from global ShopContext
+  const { products, currency, addToCart } = useContext(ShopContext);
 
   // Local state to hold the selected product's data
   const [productsData, setProductsData] = useState(false);
@@ -115,7 +115,7 @@ const Product = () => {
           </div>
 
           {/* Add to cart button */}
-          <button className='bg-black text-white px-8 py-3 text-sm active:bg-gray-700'>
+          <button onClick={()=> addToCart(productsData._id, size)} className='bg-black text-white px-8 py-3 text-sm active:bg-gray-700 cursor-pointer'>
             ADD TO CART
           </button>
 
@@ -164,4 +164,3 @@ const Product = () => {
 // Export the Product component for use in routing or other components
 export default Product;
 
-{/*3hrs 25min */}

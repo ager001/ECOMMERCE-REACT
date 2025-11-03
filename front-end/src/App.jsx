@@ -12,6 +12,8 @@ import Orders from './pages/Orders'
 import NavBar from './components/NavBar'
 import Footer from './components/Footer'
 import SearchBar from './components/SearchBar'
+import {ToastContainer} from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 
 
@@ -27,7 +29,7 @@ const App = () => {
     - lg:px-[9vw]: On large screens and up, padding increases to 9% of viewport width
     This ensures the content has breathing room and adapts nicely across screen sizes.
   */}
-
+       <ToastContainer />
        <NavBar/>
        <SearchBar/>
         <Routes>{/*I have created all 9 routes for my pages and their paths */}

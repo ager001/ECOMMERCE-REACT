@@ -7,7 +7,7 @@ const NavBar = () => {
   {/*I have created a state that will make the menu_icon int he small screen visible */ }
   const [visible, setVisible] = useState(false);
 
-  const {setShowSearch} = useContext(ShopContext);
+  const {setShowSearch, getCartCount} = useContext(ShopContext);
 
 
   return (
@@ -60,7 +60,7 @@ const NavBar = () => {
           {/*I have edited the cart icon  */}
           <img src={assets.cart_icon} alt="Cart icon" className='w-5 min-w-5' />
           <p className='absolute -right-[5px] -bottom-[5px] w-4 text-center leading-4 bg-amber-950 text-white aspect-square rounded-full text-[8px]'>
-            10
+            {getCartCount()}
           </p>
         </Link>
         {/*I have edited the small screen to display an icon and when clicked to display some paths */}
