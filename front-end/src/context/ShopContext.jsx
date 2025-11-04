@@ -1,4 +1,4 @@
-import { createContext, useState, useEffect } from "react"
+import { createContext, useState } from "react"
 {/*I have created a shopContext that can be imported anywhere in the app
      */}
 import { products } from "../assets/assets"
@@ -69,11 +69,18 @@ const getCartCount = () => {
   return totalCount;
 };
 
+    const updateQuantity = async (itemId, size, quantity)=>{
+            let cartData = structuredClone(cartItems);
+            cartData[itemId][size] = quantity;
+            setCartItems (cartData);
+    }
+
+
      // ✅ This is where you'd define shared state and functions
 
      const value = {
           products, currency, delivery_fee, search, setSearch, 
-          showSearch, setShowSearch, cartItems, addToCart, getCartCount
+          showSearch, setShowSearch, cartItems, addToCart, getCartCount, updateQuantity
      }
 
      return (
