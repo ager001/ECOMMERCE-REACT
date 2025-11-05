@@ -8,7 +8,7 @@ export const ShopContext = createContext();
 const ShopContextProvider = (props) => {
 
      const currency = 'Kes';
-     const delivery_fee = 10;
+     const delivery_fee = 400;
      const [search, setSearch] = useState('');
      const [showSearch, setShowSearch] = useState(false);
      const [cartItems, setCartItems] = useState({});
@@ -75,12 +75,57 @@ const getCartCount = () => {
             setCartItems (cartData);
     }
 
+    // Define a function to calculate the total cost of items in the cart
+       // ✅ This function calculates the total cost of all items in the cart.
+// It loops through each product and its size variants, multiplying quantity by price.
+
+const getCartAmount = () => {
+  // Initialize totalAmount to 0 — this will hold the final cart total
+  let totalAmount = 0;
+
+  // Loop through each product ID stored in the cartItems object
+  for (const productId in cartItems) {
+
+    // Find the product details (e.g., price) using the product ID
+    const itemInfo = products.find((product) => product._id === productId);
+
+    // If the product is not found (e.g., deleted or missing), skip to next item
+    if (!itemInfo) {
+      console.warn(`Product with ID ${productId} not found in products list.`);
+      continue;
+    }
+
+    // Loop through each size variant of the current product
+    for (const size in cartItems[productId]) {
+      try {
+        // Get the quantity for this size
+        const quantity = cartItems[productId][size];
+
+        // Only add to total if quantity is greater than 0
+        if (quantity > 0) {
+          // Multiply price by quantity and add to totalAmount
+          totalAmount += itemInfo.price * quantity;
+        }
+
+      } catch (error) {
+        // Log any unexpected errors (e.g., missing price or invalid data)
+        console.error(`Error calculating amount for product ${productId}, size ${size}:`, error.message);
+      }
+    }
+  }
+
+  // Return the final total amount for all items in the cart
+  return totalAmount;
+};
+
+
 
      // ✅ This is where you'd define shared state and functions
 
      const value = {
           products, currency, delivery_fee, search, setSearch, 
-          showSearch, setShowSearch, cartItems, addToCart, getCartCount, updateQuantity
+          showSearch, setShowSearch, cartItems, addToCart, getCartCount, updateQuantity,
+          getCartAmount
      }
 
      return (
