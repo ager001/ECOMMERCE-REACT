@@ -10,6 +10,9 @@ import Title from '../components/Title';
 // Import a reusable ProductItem component to display individual product cards
 import ProductItem from '../components/ProductItem';
 
+// Import Link from react-router-dom to enable navigation
+import { Link } from 'react-router-dom';
+
 // Define the RelatedProducts component, receiving `category` and `subCategory` as props
 const RelatedProducts = ({ category, subCategory }) => {
   // Access the global `products` array from ShopContext
@@ -44,13 +47,14 @@ const RelatedProducts = ({ category, subCategory }) => {
       <div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 gap-y-6'>
         {/* Map through the filtered related products and render each one */}
         {related.map((item, index) => (
-          <ProductItem
-            key={index} // Unique key for React's reconciliation
-            id={item._id} // Product ID
-            name={item.name} // Product name
-            price={item.price} // Product price
-            image={item.image} // Product image URL
-          />
+          <Link to={`/product/${item._id}`} key={index}> {/* Navigate to product page on click */}
+            <ProductItem
+              id={item._id} // Product ID
+              name={item.name} // Product name
+              price={item.price} // Product price
+              image={item.image} // Product image URL
+            />
+          </Link>
         ))}
       </div>
     </div>

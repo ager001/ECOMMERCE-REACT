@@ -9,7 +9,7 @@ const Cart = () => {
 
   // Destructure values from the ShopContext using React's useContext hook.
   // This gives access to shared state: currency, products, and cartItems.
-  const { currency, products, cartItems, updateQuantity } = useContext(ShopContext);
+  const { currency, products, cartItems, updateQuantity, navigate} = useContext(ShopContext);
 
   // Declare a state variable cartData to hold processed cart information.
   // Initially set to an empty array.
@@ -114,6 +114,12 @@ const Cart = () => {
           <div className='flex justify-end my-20'>
                <div className='w-full sm:w-full'>
                   <CartTotal/>
+                   <div className='w-full text-end' >
+              <button onClick={()=>navigate('/place-order')} className='bg-black text-white text-sm my-8 px-8 py-3 cursor-pointer'>
+                Proceed to CheckOut
+              </button>
+              
+           </div>
                </div>
           </div>
 

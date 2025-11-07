@@ -10,6 +10,8 @@ import { ShopContext } from '../context/ShopContext';
 // Import static assets like icons
 import { assets } from '../assets/assets';
 
+
+
 // Import the RelatedProducts component to show similar items
 import RelatedProducts from '../components/RelatedProducts';
 
