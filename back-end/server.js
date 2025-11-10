@@ -12,6 +12,7 @@ import connectDB from './configs/mongodb.js';
 // connects cloudinary
 import connectCloudinary from './configs/cloudinary.js';
 import userRouter from './routes/userRoute.js';
+import productRouter from './routes/productRoute.js';
 
 // -------------------- App Configuration {PART 1 }--------------------
 
@@ -40,7 +41,8 @@ app.use(cors());
 
 // -------------------- API Endpoints {PART 4}--------------------
 
-app.use('/api/user', userRouter)
+app.use('/api/user', userRouter);
+app.use ('/api/product', productRouter);
 
 // Define a GET endpoint at the root URL ('/')
 // When someone accesses http://localhost:4000/, this function runs
