@@ -100,17 +100,72 @@ const addProduct = async (req,res)=>{
 }
 
 // FUNCTION FOR LIST PRODUCTS
-const listProduct = async (req,res)=>{
+// Define an asynchronous function called listProduct that handles a request and sends a response.
+// This function is typically used as a controller in an Express route to list all products from the database.
+const listProduct = async (req, res) => {
+  try {
+    // Attempt to retrieve all product documents from the MongoDB collection using the productModel.
+    // The empty object {} means "find all documents" without any filtering criteria.
+    const products = await productModel.find({});
 
-}
+    // If the retrieval is successful, send a JSON response back to the client.
+    // The response includes a success flag and the list of products.
+    res.json({ success: true, products });
+  } catch (error) {
+    // If an error occurs during the database query, log the error to the server console.
+    console.log(error);
+
+    // Send a JSON response indicating failure.
+    // Include the error message to help the client understand what went wrong.
+    res.json({ success: false, message: error.message });
+  }
+};
 // FUNCTION FOR REMOVE PRODUCT
-const removeProduct = async (req,res)=>{
+// Define an asynchronous function called removeProduct that handles a request and sends a response.
+// This function is typically used as a controller in an Express route to delete a product from the database.
+const removeProduct = async (req, res) => {
+  try {
+    // Attempt to delete a product from the database using its unique ID.
+    // The ID is expected to be sent in the request body as req.body.id.
+    // findByIdAndDelete() searches for the document by ID and removes it if found.
+    await productModel.findByIdAndDelete(req.body.id);
 
-}
+    // If deletion is successful, send a JSON response back to the client.
+    // The response includes a success flag and a confirmation message.
+    res.json({ success: true, message: "Product successfully removed" });
+  } catch (error) {
+    // If an error occurs during the deletion process, log the error to the server console.
+    console.log(error);
+
+    // Send a JSON response indicating failure.
+    // Include the error message to help the client understand what went wrong.
+    res.json({ success: false, message: error.message });
+  }
+};
 //FUNCTION FOR SINGLE PRODUCT INFO
-const singleProduct = async (req,res)=>{
+// Define an asynchronous function called singleProduct that handles a request and sends a response.
+// This function is typically used in an Express route to fetch a single product by its ID.
+const singleProduct = async (req, res) => {
+  try {
+    // Destructure the productId from the request body.
+    // This assumes the client sends a JSON object like { "productId": "some_id" }.
+    const { productId } = req.body;
 
-}
+    // Use Mongoose's findById method to search for a product in the database by its unique ID.
+    // This returns the product document if found, or null if not found.
+    const product = await productModel.findById(productId);
+
+    // Send a JSON response back to the client with a success flag and the product data.
+    // If the product is null (not found), it will still return success: true with product: null.
+    res.json({ success: true, product });
+  } catch (error) {
+    // If an error occurs (e.g., invalid ID format, database issue), log it to the server console.
+    console.log(error);
+
+    // Send a JSON response indicating failure, along with the error message.
+    res.json({ success: false, message: error.message });
+  }
+};
 
 
 export {listProduct, addProduct, removeProduct, singleProduct}
