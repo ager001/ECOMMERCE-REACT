@@ -24,7 +24,7 @@ const productSchema = new mongoose.Schema({
   category: { type: String, required: true },
 
   // Subcategory (e.g., "Shoes", "Novels"): also required
-  subcategory: { type: String, required: true },
+  subCategory: { type: String, required: true },
 
   // Available sizes (e.g., ["S", "M", "L"]): stored as an array and required
   sizes: { type: Array, required: true },
