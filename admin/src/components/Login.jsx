@@ -3,9 +3,15 @@ import React from 'react'
 
 // Importing the useState hook to manage component-level state
 import { useState } from 'react'
+import axios from 'axios'
+import { backendUrl } from '../App';
+import { toast } from 'react-toastify'
+
+
+
 
 // Defining the Login component using an arrow function
-const Login = () => {
+const Login = ({ setToken }) => {
 
     // Declaring a state variable 'email' with its updater function 'setEmail'
     const [email, setEmail] = useState('');
@@ -18,9 +24,31 @@ const Login = () => {
         try {
             // Prevents the default form submission behavior (page reload)
             e.preventDefault();
+
+            // Sends a POST request to the backend server using Axios and waits for the response.
+            // 'backendUrl' should be a string containing the endpoint URL (e.g., 'https://api.example.com/login').
+            // The 'await' keyword pauses execution until the server responds, storing the result in 'response'.
+            const response = await axios.post(backendUrl + '/api/user/admin', { email, password });
+            // Check if the response from the server indicates a successful operation
+            if (response.data.success) {
+
+                // If successful, store the received token (e.g., for authentication) in state or local storage
+                setToken(response.data.token);
+
+            } else {
+
+                // If not successful, display an error message from the server using a toast notification
+                toast.error(response.data.message);
+            }
+
+            // Catch block handles any unexpected errors during the request (e.g., network failure, server crash)
         } catch (error) {
-            // Logs any error that occurs during form submission
+
+            // Log the full error object to the console for debugging purposes
             console.log(error);
+
+            // Show a user-friendly error message using a toast notification
+            toast.error(error.message);
         }
     }
 

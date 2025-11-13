@@ -14,16 +14,33 @@ import List from './pages/List'
 import Orders from './pages/Orders'
 import { useState } from 'react'
 import Login from './components/Login'
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
+import { useEffect } from 'react'
 
 
+
+
+// Exports a constant named 'backendUrl' that holds the value of the environment variable 'VITE_BACKEND_URL'.
+// This allows the frontend to access the backend server URL defined in a .env file (e.g., VITE_BACKEND_URL=http://localhost:5000).
+// 'import.meta.env' is Vite's way of exposing environment variables during build and runtime.
+export const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
 
 
 // Defining the main App component using an arrow function
 const App = () => {
 
-  const [token, setToken] = useState('');
+  // Initializes a state variable 'token' with the value stored in localStorage under the key 'token'.
+  // If a token exists in localStorage, it will be used as the initial state; otherwise, the state will be undefined.
+  // 'setToken' is the function used to update the token state.
+  const [token, setToken] = useState(localStorage.getItem('token') ? localStorage.getItem('token') : '');
 
+  // useEffect runs whenever the 'token' state changes.
+  // It updates localStorage with the latest token value, ensuring persistence across page reloads or sessions.
+  useEffect(() => {
+    localStorage.setItem('token', token);
+  }, [token]);
 
 
 
@@ -32,9 +49,10 @@ const App = () => {
   return (
     // Main container with a light gray background and full viewport height
     <div className='bg-gray-50 min-h-screen'>
+      <ToastContainer />
       {/* If the token is not available the login component is displayed */}
       {token === ""
-        ? <Login /> : <>
+        ? <Login setToken={setToken} /> : <>
           {/* Top navigation bar component */}
           <NavBar />
 
