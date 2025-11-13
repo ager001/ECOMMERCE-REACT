@@ -142,11 +142,42 @@ const registerUser = async (req, res) => {
 
 // Define an asynchronous function to handle admin login
 {/*ADMIN LOGIN */}
+// Define an asynchronous function named 'adminLogin' that handles admin login requests
 const adminLogin = async (req, res) => {
-  // Logic for authenticating an admin will go here
-  // Example: check admin credentials, return admin token
-};
 
+  // This is where the logic for authenticating an admin user will be implemented
+  // Typically involves verifying credentials and returning a token if valid
+
+  try {
+    // Destructure 'email' and 'password' from the request body
+    // These are expected to be sent by the client (e.g., via a login form)
+    const { email, password } = req.body;
+
+    // Check if the provided email and password match the admin credentials stored in environment variables
+    // This is a simple hardcoded check — not recommended for production use
+    if (email === process.env.ADMIN_EMAIL && password === process.env.ADMIN_PASSWORD) {
+
+      // If credentials match, generate a JWT token
+      // The payload here is a concatenation of email and password (not ideal — better to use a user ID or email alone)
+      // The token is signed using a secret key stored in environment variables
+      const token = jwt.sign(email + password, process.env.JWT_SECRET);
+
+      // Send a JSON response indicating success and include the generated token
+      res.json({ success: true, token });
+
+    } else {
+      // If credentials do not match, send a JSON response indicating failure
+      res.json({ success: false, message: "Invalid Credentials!" });
+    }
+
+  } catch (error) {
+    // If any error occurs during the process (e.g., missing fields, JWT failure), log it to the console
+    console.log(error);
+
+    // Send a JSON response indicating failure and include the error message
+    res.json({ success: false, message: error.message });
+  }
+};
 // Export all three route handlers so they can be used in other files
 // For example, you might import them in your routes file and attach them to endpoints
 export { loginUser, registerUser, adminLogin };
