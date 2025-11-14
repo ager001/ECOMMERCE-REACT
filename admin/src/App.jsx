@@ -52,9 +52,10 @@ const App = () => {
       <ToastContainer />
       {/* If the token is not available the login component is displayed */}
       {token === ""
-        ? <Login setToken={setToken} /> : <>
+        ? <Login setToken={setToken} /> : 
+        <>
           {/* Top navigation bar component */}
-          <NavBar />
+          <NavBar setToken={setToken} />
 
           {/* Horizontal line separator below the navbar */}
           <hr />
@@ -71,13 +72,13 @@ const App = () => {
               {/* Routing logic: renders different components based on the URL path */}
               <Routes>
                 {/* Route for the Add page */}
-                <Route path='/add' element={<Add />} />
+                <Route path='/add' element={<Add token={token} />} />
 
                 {/* Route for the List page */}
-                <Route path='/list' element={<List />} />
+                <Route path='/list' element={<List token={token} />} />
 
                 {/* Route for the Orders page */}
-                <Route path='/orders' element={<Orders />} />
+                <Route path='/orders' element={<Orders token={token} />} />
               </Routes>
             </div>
           </div>

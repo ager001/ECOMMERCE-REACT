@@ -44,6 +44,7 @@ app.use(cors());
 app.use('/api/user', userRouter);
 app.use ('/api/product', productRouter);
 
+
 // Define a GET endpoint at the root URL ('/')
 // When someone accesses http://localhost:4000/, this function runs
 app.get('/', (req, res) => {

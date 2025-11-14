@@ -160,7 +160,7 @@ const adminLogin = async (req, res) => {
       // If credentials match, generate a JWT token
       // The payload here is a concatenation of email and password (not ideal — better to use a user ID or email alone)
       // The token is signed using a secret key stored in environment variables
-      const token = jwt.sign(email + password, process.env.JWT_SECRET);
+      const token = jwt.sign(email+password, process.env.JWT_SECRET);
 
       // Send a JSON response indicating success and include the generated token
       res.json({ success: true, token });

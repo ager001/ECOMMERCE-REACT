@@ -29,6 +29,8 @@ const Login = ({ setToken }) => {
             // 'backendUrl' should be a string containing the endpoint URL (e.g., 'https://api.example.com/login').
             // The 'await' keyword pauses execution until the server responds, storing the result in 'response'.
             const response = await axios.post(backendUrl + '/api/user/admin', { email, password });
+            
+            
             // Check if the response from the server indicates a successful operation
             if (response.data.success) {
 
