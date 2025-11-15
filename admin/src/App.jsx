@@ -25,6 +25,7 @@ import { useEffect } from 'react'
 // This allows the frontend to access the backend server URL defined in a .env file (e.g., VITE_BACKEND_URL=http://localhost:5000).
 // 'import.meta.env' is Vite's way of exposing environment variables during build and runtime.
 export const backendUrl = import.meta.env.VITE_BACKEND_URL;
+export const currency = 'kes';
 
 
 

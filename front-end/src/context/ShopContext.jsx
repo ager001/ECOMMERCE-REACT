@@ -1,9 +1,9 @@
-import { createContext, useState } from "react"
+import { createContext, useEffect, useState } from "react"
 {/*I have created a shopContext that can be imported anywhere in the app
      */}
-import { products } from "../assets/assets"
 import { toast } from "react-toastify";
 import {useNavigate} from "react-router-dom"
+import axios from 'axios'
 
 
 
@@ -13,10 +13,13 @@ const ShopContextProvider = (props) => {
 
      const currency = 'Kes';
      const delivery_fee = 400;
+     const backendUrl = import.meta.env.VITE_BACKEND_URL
      const [search, setSearch] = useState('');
      const [showSearch, setShowSearch] = useState(false);
      const [cartItems, setCartItems] = useState({});
+     const [products, setProducts] = useState([]);
      const navigate = useNavigate();
+     
 
 
 
@@ -126,14 +129,27 @@ const getCartAmount = () => {
   return totalAmount;
 };
 
-
+      const getProductsData = async () =>
+        {
+        try {
+          const response = await axios.get('http://localhost:4000/api/product/list');
+          console.log(response.data);
+          
+        } catch (error) {
+          console.log(error);
+          
+        }
+      }
+        useEffect(()=>{
+          getProductsData()
+        },[])
 
      // ✅ This is where you'd define shared state and functions
 
      const value = {
           products, currency, delivery_fee, search, setSearch, 
           showSearch, setShowSearch, cartItems, addToCart, getCartCount, updateQuantity,
-          getCartAmount, navigate
+          getCartAmount, navigate, backendUrl
      }
 
      return (
