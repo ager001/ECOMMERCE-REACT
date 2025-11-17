@@ -6,6 +6,7 @@ import CartTotal from '../components/CartTotal'
 
 // Define a functional component named Cart
 const Cart = () => {
+  
 
   // Destructure values from the ShopContext using React's useContext hook.
   // This gives access to shared state: currency, products, and cartItems.
@@ -18,7 +19,9 @@ const Cart = () => {
   // useEffect hook runs whenever cartItems changes.
   // Its purpose is to transform the cartItems object into a structured array.
   useEffect(() => {
-    // Temporary array to hold transformed cart data
+
+    if (products.length > 0) {
+        // Temporary array to hold transformed cart data
     const tempData = [];
 
     // Outer loop: iterate over each product ID in cartItems
@@ -39,7 +42,10 @@ const Cart = () => {
 
     // Update the cartData state with the transformed array
     setCartData(tempData);
-  }, [cartItems]); // Dependency array ensures the effect runs when cartItems changes
+    }
+
+  
+  }, [cartItems, products]); // Dependency array ensures the effect runs when cartItems changes
 
   // Return the JSX structure for the Cart component
   return (

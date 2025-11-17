@@ -112,7 +112,7 @@ const Collection = () => {
   // Reapply filters whenever category, subcategory, search, or showSearch changes
   useEffect(() => {
     applyFilter();
-  }, [category, subCategory, search, showSearch]);
+  }, [category, subCategory, search, showSearch, products]);
 
   // Re-sort products whenever sortType changes
   useEffect(() => {

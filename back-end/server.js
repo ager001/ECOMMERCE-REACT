@@ -13,6 +13,8 @@ import connectDB from './configs/mongodb.js';
 import connectCloudinary from './configs/cloudinary.js';
 import userRouter from './routes/userRoute.js';
 import productRouter from './routes/productRoute.js';
+import cartRouter from './routes/cartRoute.js';
+import orderRouter from './routes/OrderRoute.js';
 
 // -------------------- App Configuration {PART 1 }--------------------
 
@@ -43,6 +45,9 @@ app.use(cors());
 
 app.use('/api/user', userRouter);
 app.use ('/api/product', productRouter);
+app.use('/api/cart', cartRouter);
+app.use('/api/order', orderRouter)
+
 
 
 // Define a GET endpoint at the root URL ('/')

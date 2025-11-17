@@ -1,5 +1,4 @@
-// Import React and useContext hook for accessing context values
-import React, { useContext } from 'react';
+
 
 // Import a reusable Title component for section headings
 import Title from '../components/Title';
@@ -15,20 +14,45 @@ import { useState } from 'react';
 
 // Import ShopContext to access shared global state and functions like navigation
 import { ShopContext } from '../context/ShopContext';
+import { useContext } from 'react';
 
 // Define the PlaceOrder component
 const PlaceOrder = () => {
 
   // Local state to track selected payment method (e.g., 'mpesa')
   const [method, setMethod] = useState('');
+  const {navigate, backendUrl, token, cartItems, serCartItems, getCartAmount, delivery_fee, products } = useContext(ShopContext);
 
-  // Access the navigate function from ShopContext to redirect user after placing order
-  const { navigate } = useContext(ShopContext);
+
+
+  const [formData, setFormData] = useState({
+      fullName:'',
+      town:'',
+      idNumber: '',
+      phoneNumber:''
+  })
+
+  const onChangeHandler = () => {
+        const name = event.target.name;
+        const value = event.target.value
+
+        setFormData(data => ({...data, [name]: value}))
+        
+
+  }
+
+  const onSubmitHandler = async (event) => {
+      event.preventDefault();
+  }
+
+
+
+
 
   // Return the JSX layout for the PlaceOrder page
   return (
     // Main container with responsive layout and styling
-    <div className='flex flex-col sm:flex-row justify-between gap-4 pt-5 sm:pt-14 min-h-[80vh] border-t text-emerald-700'>
+    <form onSubmit={onSubmitHandler} className='flex flex-col sm:flex-row justify-between gap-4 pt-5 sm:pt-14 min-h-[80vh] border-t text-emerald-700'>
 
       {/* Left Side: Delivery Information Section */}
       <div className='flex flex-col gap-4 w-full sm:max-w-[480px]'>
@@ -50,7 +74,8 @@ const PlaceOrder = () => {
             </label>
 
             {/* Input field for town name */}
-            <input 
+            <input onChange={onChangeHandler} value={formData.town} 
+              required
               type="text" 
               name='town'
               placeholder='Enter your Town'
@@ -67,7 +92,8 @@ const PlaceOrder = () => {
             <label htmlFor="fullName" className="block text-sm font-medium text-emerald-700">
               Full Name (as per ID)
             </label>
-            <input
+            <input onChange={onChangeHandler} value={formData.fullName} 
+              required
               type="text"
               id="fullName"
               name="fullName"
@@ -81,7 +107,8 @@ const PlaceOrder = () => {
             <label htmlFor="phoneNumber" className="block text-sm font-medium text-emerald-700">
               Phone Number
             </label>
-            <input
+            <input onChange={onChangeHandler} value={formData.phoneNumber} 
+              required
               type="text"
               id="phoneNumber"
               name="phoneNumber"
@@ -95,7 +122,8 @@ const PlaceOrder = () => {
             <label htmlFor="idNumber" className="block text-sm font-medium text-emerald-700">
               National ID Number
             </label>
-            <input
+            <input onChange={onChangeHandler} value={formData.idNumber} 
+              required
               type="text"
               id="idNumber"
               name="idNumber"
@@ -136,8 +164,8 @@ const PlaceOrder = () => {
 
           {/* Place Order button */}
           <div className='w-full text-end mt-8'>
-            <button 
-              onClick={()=>navigate('/orders')} // Redirect to orders page on click
+            <button type='submit'
+               
               className='bg-black text text-white px-16 py-3 text-sm cursor-pointer'
             >
               PLACE ORDER
@@ -145,7 +173,7 @@ const PlaceOrder = () => {
           </div>
         </div>
       </div>
-    </div>
+    </form>
   )
 }
 
