@@ -1,11 +1,15 @@
 // Import React and the useContext hook to access shared state from context
-import React, { useContext } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 
 // Import the ShopContext to access global product and currency data
 import { ShopContext } from '../context/ShopContext'
 
 // Import a reusable Title component for section headings
 import Title from '../components/Title'
+import axios from 'axios'
+
+
+
 
 // Define the Orders component
 const Orders = () => {
@@ -13,7 +17,29 @@ const Orders = () => {
   // Destructure `products` and `currency` from the ShopContext
   // `products` is an array of product objects
   // `currency` is a string representing the current currency symbol (e.g., KES, $, €)
-  const { products, currency } = useContext(ShopContext);
+  const { backendUrl, token,  currency } = useContext(ShopContext);
+
+  const [orderData, setOrderData] = useState([]);
+
+  const loadOrderData = async () =>{
+    try {
+      if (!token) {
+          return null
+      }
+
+      const response = await axios.post(backendUrl + '/api/order/userorders', {}, {headers:{token}})
+      console.log(response.data);
+      
+    } catch (error) {
+      
+    }
+  }
+
+  useEffect(()=>{
+      loadOrderData()
+  },[token])
+
+
 
   // Return the JSX layout for the Orders page
   return (
@@ -30,7 +56,7 @@ const Orders = () => {
       <div>
         {
           // Slice the products array to simulate 3 recent orders (from index 1 to 3)
-          products.slice(1, 4).map((item, index) => (
+          orderData.map((item, index) => (
             // Each order item container with border and responsive layout
             <div
               key={index} // Unique key for React's rendering optimization

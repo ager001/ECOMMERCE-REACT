@@ -15,34 +15,69 @@ import { useState } from 'react';
 // Import ShopContext to access shared global state and functions like navigation
 import { ShopContext } from '../context/ShopContext';
 import { useContext } from 'react';
+import axios from 'axios'
+
+
+
+
 
 // Define the PlaceOrder component
 const PlaceOrder = () => {
 
   // Local state to track selected payment method (e.g., 'mpesa')
   const [method, setMethod] = useState('');
-  const {navigate, backendUrl, token, cartItems, serCartItems, getCartAmount, delivery_fee, products } = useContext(ShopContext);
+  const { navigate, backendUrl, token, cartItems, serCartItems, getCartAmount, delivery_fee, products } = useContext(ShopContext);
 
 
 
   const [formData, setFormData] = useState({
-      fullName:'',
-      town:'',
-      idNumber: '',
-      phoneNumber:''
+    fullName: '',
+    town: '',
+    idNumber: '',
+    phoneNumber: ''
   })
 
   const onChangeHandler = () => {
-        const name = event.target.name;
-        const value = event.target.value
+    const name = event.target.name;
+    const value = event.target.value
 
-        setFormData(data => ({...data, [name]: value}))
-        
+    setFormData(data => ({ ...data, [name]: value }))
+
 
   }
 
   const onSubmitHandler = async (event) => {
-      event.preventDefault();
+    event.preventDefault();
+    try {
+
+      let orderItems = []
+      for (const items in cartItems) {
+        for (const item in cartItems[items]) {
+          if (cartItems[items][item] > 0) {
+            const itemInfo = structuredClone(products.find(product => product._id === items));
+            if (itemInfo) {
+              itemInfo.size = item
+              itemInfo.quantity = cartItems[items][item]
+              orderItems.push(itemInfo)
+            }
+          }
+        }
+      }
+      let orderData = {
+        address: formData,
+        items: orderItems,
+        amount: getCartAmount() + delivery_fee
+      }
+
+      if (method === 'mpesa') {
+        // Handle M-Pesa payment logic here
+        const response = await axios.post(backendUrl + '/api/place/mpesa', {headers:{token}})
+      }
+
+
+    } catch (error) {
+
+    }
   }
 
 
@@ -74,9 +109,9 @@ const PlaceOrder = () => {
             </label>
 
             {/* Input field for town name */}
-            <input onChange={onChangeHandler} value={formData.town} 
+            <input onChange={onChangeHandler} value={formData.town}
               required
-              type="text" 
+              type="text"
               name='town'
               placeholder='Enter your Town'
               className="mt-1 w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-400"
@@ -92,7 +127,7 @@ const PlaceOrder = () => {
             <label htmlFor="fullName" className="block text-sm font-medium text-emerald-700">
               Full Name (as per ID)
             </label>
-            <input onChange={onChangeHandler} value={formData.fullName} 
+            <input onChange={onChangeHandler} value={formData.fullName}
               required
               type="text"
               id="fullName"
@@ -107,7 +142,7 @@ const PlaceOrder = () => {
             <label htmlFor="phoneNumber" className="block text-sm font-medium text-emerald-700">
               Phone Number
             </label>
-            <input onChange={onChangeHandler} value={formData.phoneNumber} 
+            <input onChange={onChangeHandler} value={formData.phoneNumber}
               required
               type="text"
               id="phoneNumber"
@@ -122,7 +157,7 @@ const PlaceOrder = () => {
             <label htmlFor="idNumber" className="block text-sm font-medium text-emerald-700">
               National ID Number
             </label>
-            <input onChange={onChangeHandler} value={formData.idNumber} 
+            <input onChange={onChangeHandler} value={formData.idNumber}
               required
               type="text"
               id="idNumber"
@@ -139,33 +174,33 @@ const PlaceOrder = () => {
 
         {/* Cart summary section */}
         <div className='mt-8 min-w-80'>
-          <CartTotal/> {/* Displays total price and cart items */}
+          <CartTotal /> {/* Displays total price and cart items */}
         </div>
 
         {/* Payment method section */}
         <div className='mt-12'>
 
           {/* Section heading using Title component */}
-          <Title text1={'PAYMENT'}  text2={'METHOD'}/>
+          <Title text1={'PAYMENT'} text2={'METHOD'} />
 
           {/* Payment method options */}
           <div className='flex gap-3 flex-col lg:flex-row'>
 
             {/* Mpesa option with clickable selection */}
-            <div onClick={()=>setMethod('mpesa')} className='flex items-center gap-3 border p-2 px-3 cursor-pointer'>
+            <div onClick={() => setMethod('mpesa')} className='flex items-center gap-3 border p-2 px-3 cursor-pointer'>
 
               {/* Radio button indicator for selected method */}
-              <p className={`min-w-3.5 h-3.5 border rounded-full ${method === 'mpesa' ? 'bg-green-600': '' }`}></p>
+              <p className={`min-w-3.5 h-3.5 border rounded-full ${method === 'mpesa' ? 'bg-green-600' : ''}`}></p>
 
               {/* Mpesa logo (using stripe_logo as placeholder) */}
-              <img src={assets.stripe_logo} alt="" className='h-15 mx-4 '/>
+              <img src={assets.stripe_logo} alt="" className='h-15 mx-4 ' />
             </div>
           </div>
 
           {/* Place Order button */}
           <div className='w-full text-end mt-8'>
             <button type='submit'
-               
+
               className='bg-black text text-white px-16 py-3 text-sm cursor-pointer'
             >
               PLACE ORDER
