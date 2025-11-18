@@ -16,6 +16,7 @@ import { useState } from 'react';
 import { ShopContext } from '../context/ShopContext';
 import { useContext } from 'react';
 import axios from 'axios'
+import { toast } from 'react-toastify';
 
 
 
@@ -26,7 +27,7 @@ const PlaceOrder = () => {
 
   // Local state to track selected payment method (e.g., 'mpesa')
   const [method, setMethod] = useState('');
-  const { navigate, backendUrl, token, cartItems, serCartItems, getCartAmount, delivery_fee, products } = useContext(ShopContext);
+  const { navigate, backendUrl, token, cartItems, setCartItems, getCartAmount, delivery_fee, products } = useContext(ShopContext);
 
 
 
@@ -37,7 +38,7 @@ const PlaceOrder = () => {
     phoneNumber: ''
   })
 
-  const onChangeHandler = () => {
+  const onChangeHandler = (event) => {
     const name = event.target.name;
     const value = event.target.value
 
@@ -63,20 +64,41 @@ const PlaceOrder = () => {
           }
         }
       }
+      
+      
       let orderData = {
         address: formData,
         items: orderItems,
         amount: getCartAmount() + delivery_fee
       }
 
-      if (method === 'mpesa') {
-        // Handle M-Pesa payment logic here
-        const response = await axios.post(backendUrl + '/api/place/mpesa', {headers:{token}})
-      }
+    switch (method) {
+  case 'cod': {
+    // API call for Cash on Delivery
+    const response = await axios.post(
+      `${backendUrl}/api/order/place`,
+      orderData,
+      { headers: { token } }
+    );
+    console.log(response.data);
+    
+    // You can handle the response here if needed
+    if (response.data.success) {
+      setCartItems({})
+      navigate('/orders')
+    } else{
+      toast.error(response.data.message)
+    }
+    break;
+  }
 
+  default:
+    break;
+}
 
     } catch (error) {
-
+         console.log(error);
+         
     }
   }
 
@@ -112,7 +134,7 @@ const PlaceOrder = () => {
             <input onChange={onChangeHandler} value={formData.town}
               required
               type="text"
-              name='town'
+              name='delivery-location'
               placeholder='Enter your Town'
               className="mt-1 w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-400"
             />
@@ -192,8 +214,20 @@ const PlaceOrder = () => {
               {/* Radio button indicator for selected method */}
               <p className={`min-w-3.5 h-3.5 border rounded-full ${method === 'mpesa' ? 'bg-green-600' : ''}`}></p>
 
-              {/* Mpesa logo (using stripe_logo as placeholder) */}
+              {/* Mpesa logo  */}
               <img src={assets.stripe_logo} alt="" className='h-15 mx-4 ' />
+            </div >
+            {/*Cash on Delivery */}
+            <div
+              onClick={() => setMethod('cod')}
+              className="flex items-center gap-3 border p-3 px-4 cursor-pointer rounded-md hover:shadow-md transition"
+            >
+              <div
+                className={`w-4 h-4 border rounded-full ${
+                  method === 'cod' ? 'bg-green-600' : ''
+                }`}
+              ></div>
+              <span className="text-sm font-medium">Cash on Delivery</span>
             </div>
           </div>
 
