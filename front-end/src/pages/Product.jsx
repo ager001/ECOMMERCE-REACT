@@ -133,23 +133,7 @@ const Product = () => {
         </div>
       </div>
 
-      {/* Description and Reviews section */}
-      <div className='mt-20'>
-        <div className='flex'>
-          <b className='border px-5 py-3 text-sm'>Description</b>
-          <p className='border px-5 py-3 text-sm'>Reviews</p>
-        </div>
-
-        {/* Static description content */}
-        <div className='flex flex-col gap-4 border px-6 py-6 text-sm text-emerald-800 mt-10'>
-          <p>
-            A wonderful serenity has taken possession of my entire soul, like these sweet mornings of spring which I enjoy with my whole heart...
-          </p>
-          <p>
-            The quick, brown fox jumps over a lazy dog. DJs flock by when MTV ax quiz prog.
-          </p>
-        </div>
-      </div>
+    
 
       {/* Related products section */}
       <RelatedProducts
