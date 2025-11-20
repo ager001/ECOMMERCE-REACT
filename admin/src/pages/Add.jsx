@@ -155,9 +155,9 @@ const Add = ({ token }) => {
             value={subCategory}
             className='w-full px-3 py-2'
           >
-            <option value="Top-wear">Top-wear</option>
-            <option value="Bottom-wear">Bottom-wear</option>
-            <option value="Winter-wear">Winter-wear</option>
+            <option value="Topwear">Top-wear</option>
+            <option value="Bottomwear">Bottom-wear</option>
+            <option value="Winterwear">Winter-wear</option>
           </select>
         </div>
 
