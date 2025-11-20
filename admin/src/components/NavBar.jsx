@@ -14,9 +14,9 @@ const NavBar = ({ setToken }) => {
       {/* Displaying a logo image from the imported assets */}
       {/* The width is responsive: minimum 10% of container width or 80px */}
       <img 
-        src={assets.logo} 
+        src={assets.logo}
         alt="" 
-        className='w-[max(10%,80px)]' 
+        className='w-50' 
       />
 
       {/* A logout button that clears the token when clicked */}
