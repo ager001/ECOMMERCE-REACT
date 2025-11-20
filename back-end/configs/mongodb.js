@@ -1,22 +1,32 @@
-// Import the mongoose library, which provides tools to connect and interact with MongoDB
+// Import the mongoose library
 import mongoose from 'mongoose';
 
-// Define an asynchronous function called connectDB to handle the database connection
+// Define an asynchronous function to connect to MongoDB
 const connectDB = async () => {
-
-    // Set up an event listener on the mongoose connection object
-    // This will run when the connection to MongoDB is successfully established
-    mongoose.connection.on('connected', () => {
-        // Log a friendly message to the console when the database is connected
-        // "Tuko ndani bro" is Swahili slang meaning "We're inside" — a fun way to confirm success
-        console.log("DB Connected Tuko ndani bro");
+  try {
+    // Attempt to connect to the MongoDB database
+    await mongoose.connect(`${process.env.MONGODB_URI}/Ecommerce`, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+      serverSelectionTimeoutMS: 30000, // Increase timeout to 30 seconds
     });
 
-    // Attempt to connect to the MongoDB database using the URI from environment variables
-    // The URI should look like: mongodb://localhost:27017
-    // Appending '/Projects' connects specifically to the 'Projects' database
-    await mongoose.connect(`${process.env.MONGODB_URI}/Ecommerce`);
+    // Log a success message when connected
+    console.log("✅ DB Connected — Tuko ndani bro");
+
+    // Optional: handle disconnection events
+    mongoose.connection.on('disconnected', () => {
+      console.warn("⚠️ MongoDB disconnected");
+    });
+
+    mongoose.connection.on('error', (err) => {
+      console.error("❌ MongoDB connection error:", err);
+    });
+
+  } catch (error) {
+    console.error("❌ Initial MongoDB connection failed:", error.message);
+    process.exit(1); // Exit the process if connection fails
+  }
 };
 
-// Export the connectDB function so it can be imported and used in other parts of the app
 export default connectDB;
