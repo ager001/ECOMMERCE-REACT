@@ -5,65 +5,63 @@ import express from 'express';
 import cors from 'cors';
 
 // Load environment variables from a .env file into process.env
-// This allows you to keep secrets like API keys or port numbers outside your code
 import 'dotenv/config';
-// connects the database
+
+// Connects the database
 import connectDB from './configs/mongodb.js';
-// connects cloudinary
+
+// Connects Cloudinary
 import connectCloudinary from './configs/cloudinary.js';
+
+// Import route handlers
 import userRouter from './routes/userRoute.js';
 import productRouter from './routes/productRoute.js';
 import cartRouter from './routes/cartRoute.js';
 import orderRouter from './routes/OrderRoute.js';
 
-// -------------------- App Configuration {PART 1 }--------------------
+// -------------------- App Configuration {PART 1} --------------------
 
-// Create an instance of an Express application
 const app = express();
-
-// Define the port number the server will listen on
-// It first checks for a PORT value in environment variables, otherwise defaults to 4000
 const port = process.env.PORT || 4000;
 
-//------------------------ConnectDB {PART 2}---------------
+// -------------------- Connect Services {PART 2} --------------------
 
-connectDB()
-
-//-----------------------Connect Cloudinary------------------
-connectCloudinary()
-
+connectDB();
+connectCloudinary();
 
 // -------------------- Middleware Setup {PART 3} --------------------
 
-// Enable Express to automatically parse incoming JSON payloads in requests
+// Enable Express to automatically parse incoming JSON payloads
 app.use(express.json());
 
-// Enable CORS so that your API can be accessed from other domains (like your React frontend)
-app.use(cors());
+// Configure CORS to allow requests from your frontend
+const allowedOrigins = [
+  'https://ecommerce-frontend-git-main-ager001s-projects.vercel.app'
+];
 
-// -------------------- API Endpoints {PART 4}--------------------
+app.use(cors({
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true,
+}));
+
+// -------------------- API Endpoints {PART 4} --------------------
 
 app.use('/api/user', userRouter);
-app.use ('/api/product', productRouter);
+app.use('/api/product', productRouter);
 app.use('/api/cart', cartRouter);
-app.use('/api/order', orderRouter)
+app.use('/api/order', orderRouter);
 
-
-
-// Define a GET endpoint at the root URL ('/')
-// When someone accesses http://localhost:4000/, this function runs
+// Root route
 app.get('/', (req, res) => {
-    // Send a simple text response to confirm the API is working
-    res.send("API working....");
+  res.send("API working....");
 });
 
 // -------------------- Start the Server --------------------
 
-// Start the server and listen on the defined port
-// Once the server is running, log a message to the console
 app.listen(port, () => console.log('Server started on PORT: ' + port));
-
-
-
-
-
