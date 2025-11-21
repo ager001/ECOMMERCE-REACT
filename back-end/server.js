@@ -39,7 +39,13 @@ connectCloudinary()
 app.use(express.json());
 
 // Enable CORS so that your API can be accessed from other domains (like your React frontend)
-app.use(cors());
+app.use(cors({
+     origin: "https://shopkali-frontend.vercel.app", // ✅ exact frontend URL
+  credentials: true, // ✅ allow cookies/authorization headers
+}
+     
+
+));
 
 // -------------------- API Endpoints {PART 4}--------------------
 
